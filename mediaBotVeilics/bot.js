@@ -11,5 +11,49 @@ bot.command('newyork', ctx => {
     }
   );
 });
+bot.command('dubai', ctx => {
+  bot.telegram.sendChatAction(ctx.chat.id, 'upload_video');
+  bot.telegram.sendAnimation(
+    ctx.chat.id,
+    'https://media.giphy.com/media/MVDPX3gaKFPuo/giphy.gif',
+    {
+      reply_to_message_id: ctx.message.message_id,
+    }
+  );
+});
+
+bot.command('cities', ctx => {
+  let cities = [
+    'res/dubai.jpg',
+    'res/newyork.jpg',
+    'res/hongkong.jpg',
+    'res/singapore.jpg',
+  ];
+
+  let result = cities.map(city => {
+    return { type: 'photo', media: { source: city } };
+  });
+
+  bot.telegram.sendMediaGroup(ctx.chat.id, result);
+
+  bot.command('citieslist', ctx => {
+    bot.telegram.sendChatAction(ctx.chat.id, 'upload_document');
+    bot.telegram.sendDocument(
+      ctx.chat.id,
+      {
+        source: 'res/citieslist.txt',
+      },
+      { thumb: { source: 'res/dubai.jpg' } }
+    );
+  });
+});
+
+bot.command('singapore', ctx => {
+  bot.telegram.sendLocation(ctx.chat.id, 1.3521, 103.8198);
+});
+
+bot.on('message', ctx => {
+  console.log(Object.keys(ctx.message));
+});
 
 bot.launch();
