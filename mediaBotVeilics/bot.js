@@ -1,6 +1,12 @@
 const { Telegraf } = require('telegraf');
 const bot = new Telegraf('1857199167:AAGTdnWt-dIRyOzAYthrk8vL8BSlkszR4Pk');
 
+bot.command(['start', 'help'], ctx => {
+  let message = `
+  /newyork - get image of 
+  `;
+});
+
 bot.command('newyork', ctx => {
   bot.telegram.sendChatAction(ctx.chat.id, 'upload_photo');
   bot.telegram.sendPhoto(
@@ -34,6 +40,7 @@ bot.command('cities', ctx => {
     return { type: 'photo', media: { source: city } };
   });
 
+  bot.telegram.sendChatAction(ctx.chat.id, 'upload_photo');
   bot.telegram.sendMediaGroup(ctx.chat.id, result);
 
   bot.command('citieslist', ctx => {
@@ -49,7 +56,23 @@ bot.command('cities', ctx => {
 });
 
 bot.command('singapore', ctx => {
+  bot.telegram.sendChatAction(ctx.chat.id, 'find_location');
   bot.telegram.sendLocation(ctx.chat.id, 1.3521, 103.8198);
+});
+
+bot.command('showkeyboard', ctx => {
+  ctx.telegram.sendChatAction(ctx.chat.id, 'typing');
+  ctx.telegram.sendMessage(ctx.chat.id, 'please see below', {
+    reply_markup: {
+      keyboard: [
+        [{ text: '/dubai' }, { text: '/newyork' }, { text: '/singapore' }],
+        [
+          { text: 'Google', url: 'https://google.com' },
+          { text: '/showkeyboard' },
+        ],
+      ],
+    },
+  });
 });
 
 bot.on('message', ctx => {
